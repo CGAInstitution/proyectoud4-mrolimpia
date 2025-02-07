@@ -3,6 +3,7 @@ package madstodolist.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "ejercicios")
@@ -18,7 +19,10 @@ public class Ejercicio implements Serializable {
     @Column (name = "imagen", nullable = false)
     private String imagen;
 
-    
+    @OneToMany (mappedBy = "maquinas", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Maquina> maquinas;
+
+
 
 
 
