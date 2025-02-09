@@ -1,0 +1,42 @@
+{
+  "categorias": [
+    {
+      "id": 1,
+      "nombre": "Fuerza"
+    },
+    {
+      "id": 2,
+      "nombre": "Cardio"
+    },
+    {
+      "id": 3,
+      "nombre": "Hipertrofia"
+    }
+  ],
+  "ejercicios": [
+    {
+      "id": 1,
+      "nombre": "Press banca",
+      "imagen": "",
+      "categoria" : "1"
+    },
+    {
+      "id": 2,
+      "nombre": "Sentadillas",
+      "imagen": "Ejercicio para trabajar piernas y glúteos.",
+      "categoria" : "1"
+    },
+    {
+      "id": 3,
+      "nombre": "Correr en cinta",
+      "imagen": "Ejercicio cardiovascular para mejorar la resistencia y quema de calorías.",
+      "categoria" : "1"
+    },
+    {
+      "id": 4,
+      "nombre": "Press de banca",
+      "imagen": "Ejercicio de hipertrofia para trabajar el pecho.",
+      "categoria" : "1"
+    }
+  ]
+}

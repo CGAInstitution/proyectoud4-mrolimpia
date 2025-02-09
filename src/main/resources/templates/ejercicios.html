@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .ejercicio-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .ejercicio-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .ejercicio-card:hover {
+            transform: scale(1.05);
+        }
+
+        .ejercicio-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .ejercicio-card h3 {
+            font-size: 20px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .ejercicio-card p {
+            font-size: 16px;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .ejercicio-card .categoria {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 40px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Gestión de Ejercicios</h1>
+</header>
+
+<!-- Lista de Ejercicios -->
+<h2>Lista de Ejercicios</h2>
+<div class="ejercicio-container" id="ejercicios-container">
+    <!-- Los ejercicios se cargarán aquí dinámicamente -->
+</div>
+
+<!-- Formulario para agregar un nuevo ejercicio -->
+<h2>Agregar Nuevo Ejercicio</h2>
+<form id="ejercicio-form">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="imagen">Imagen:</label>
+    <input type="file" id="imagen" name="imagen" accept="image/*" required><br><br>
+
+    <label for="categoria">Categoría:</label>
+    <select id="categoria" name="categoria_id" required>
+        <option value="1">Fuerza</option>
+        <option value="2">Cardio</option>
+        <option value="3">Hipertrofia</option>
+    </select><br><br>
+
+    <button type="submit">Agregar Ejercicio</button>
+</form>
+
+<footer>
+    <p>&copy; 2025 Ejercicios - Todos los derechos reservados.</p>
+</footer>
+
+<script>
+    // Cargar los ejercicios desde el backend
+    async function cargarEjercicios() {
+        const response = await fetch('/api/ejercicios');
+        const ejercicios = await response.json();
+
+        const container = document.getElementById('ejercicios-container');
+        container.innerHTML = ''; // Limpiar el contenedor
+
+        ejercicios.forEach(ejercicio => {
+            const ejercicioDiv = document.createElement('div');
+            ejercicioDiv.classList.add('ejercicio-card');
+            ejercicioDiv.innerHTML = `
+                <img src="${ejercicio.imagen}" alt="${ejercicio.nombre}">
+                <h3>${ejercicio.nombre}</h3>
+                <p><strong>Categoría:</strong> <span class="categoria">${ejercicio.categoria.nombre}</span></p>
+                <p><strong>Descripción:</strong> ${ejercicio.descripcion}</p>
+            `;
+            container.appendChild(ejercicioDiv);
+        });
+    }
+
+    // Llamar a la función para cargar los ejercicios al cargar la página
+    window.onload = cargarEjercicios;
+
+    // Manejo del formulario para agregar ejercicios
+    document.getElementById('ejercicio-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nombre = document.getElementById('nombre').value;
+        const imagen = document.getElementById('imagen').files[0];
+        const categoriaId = document.getElementById('categoria').value;
+
+        const formData = new FormData();
+        formData.append('nombre', nombre);
+        formData.append('imagen', imagen);
+        formData.append('categoria_id', categoriaId);
+
+        const response = await fetch('/api/ejercicios', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            cargarEjercicios(); // Recargar los ejercicios
+        }
+    });
+</script>
+
+</body>
+</html>
